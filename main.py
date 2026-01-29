@@ -8,6 +8,7 @@ from robot_client import RobotClient
 from state import SystemState
 from control import control_loop
 from sensor import sensor_loop
+from command import command_loop
 from protocol import HANDSHAKE
 from gui import RobotlabApp
 
@@ -58,6 +59,13 @@ def main():
     threading.Thread(
         target=sensor_loop,
         args=(state, stop_event),
+        daemon=True
+    ).start()
+
+    # --- CLI command loop ---
+    threading.Thread(
+        target=command_loop,
+        args=(control_q, state, stop_event),
         daemon=True
     ).start()
 
