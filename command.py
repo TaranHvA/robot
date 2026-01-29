@@ -1,8 +1,12 @@
+# command.py
+import time
+
 def command_loop(control_q, state, stop_event):
-    print("Type: run <id>, stop, status, exit")
+    time.sleep(3)
 
     while not stop_event.is_set():
         try:
+            print("Type: run <id>, stop, status, exit(to exit the program)")
             cmd = input("> ")
         except EOFError:
             break

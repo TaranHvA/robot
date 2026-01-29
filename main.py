@@ -13,12 +13,12 @@ from protocol import HANDSHAKE
 from gui import RobotlabApp
 
 logging.basicConfig(level=logging.INFO)
-
+ROBOT_NAMES = list(RobotClient.ROBOT_IPS.keys())
 
 def connect_and_handshake(client):
     while True:
-        robot = input("Robot name [Local]: ") or "Local"
-        port = input("Port [5000]: ") or "5000"
+        robot = input(f"Robot name [{", ".join(ROBOT_NAMES)}] or [Local]: ") or "Local"
+        port = input("Port custom or [5000]: ") or "5000"
 
         ok, msg = client.connect(robot, int(port))
         print(msg)
@@ -48,17 +48,17 @@ def main():
     # --- Connect & handshake ---
     connect_and_handshake(client)
 
-    # --- Control loop thread ---
-    threading.Thread(
-        target=control_loop,
-        args=(control_q, state, client, stop_event),
-        daemon=True
-    ).start()
-
     # --- Sensor loop thread ---
     threading.Thread(
         target=sensor_loop,
         args=(state, stop_event),
+        daemon=True
+    ).start()
+
+    # --- Control loop thread ---
+    threading.Thread(
+        target=control_loop,
+        args=(control_q, state, client, stop_event),
         daemon=True
     ).start()
 
@@ -69,7 +69,7 @@ def main():
         daemon=True
     ).start()
 
-    # --- GUI (MOET in main thread) ---
+    # --- GUI ---
     app = RobotlabApp(state, stop_event)
     app.protocol("WM_DELETE_WINDOW", app.on_closing)
     app.mainloop()

@@ -27,6 +27,10 @@ class RobotlabApp(ctk.CTk):
         self.after(100, self.update_ui)
 
     def update_ui(self):
+        if self.stop_event.is_set():
+            self.on_closing()
+            return
+        
         value = self.system_state.get_sensor_value()
 
         if value is not None:
