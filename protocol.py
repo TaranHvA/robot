@@ -1,0 +1,10 @@
+# protocol.py
+
+# Message types
+HANDSHAKE = 0
+RUN_PATH = 10
+RUN_PATH_2 = 20
+STOP = 99
+
+RAPID_GET_SENSOR = 30
+RAPID_SENSOR_REPLY = 31
