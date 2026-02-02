@@ -7,6 +7,7 @@ import logging
 log = logging.getLogger("robot")
 
 class RobotClient:
+    """TCP client for communicating with the robot controller."""
     ROBOT_IPS = {
         "Green": "10.0.0.10",
         "Yellow": "10.0.0.11",
@@ -27,6 +28,8 @@ class RobotClient:
         self.rx_q = queue.Queue()
 
     def connect(self, robot_name: str, port: int):
+        """Connect to the robot and start TX/RX threads."""
+
         robot = robot_name.strip().capitalize()
 
         if robot not in self.ROBOT_IPS:
@@ -49,6 +52,7 @@ class RobotClient:
             return False, f"Connection to {robot} failed: {e}"
 
     def send(self, target, msg_type, value, prio=10):
+        """Queue a message to be sent to the robot."""
         self.seq += 1
         msg = f"{target},{msg_type},{value},{self.seq}"
         self.tx_q.put((prio, msg))
