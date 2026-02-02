@@ -1,4 +1,4 @@
-# rx.py (of gewoon in main.py als je wilt)
+# rx.py
 import logging
 from protocol import RAPID_GET_HEAT_SENSOR, SENSOR
 
